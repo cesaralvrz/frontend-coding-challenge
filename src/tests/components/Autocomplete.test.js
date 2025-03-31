@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, fireEvent, waitFor } from '@testing-library/vue';
-import Autocomplete from '~/components/Autocomplete.vue';
+import Autocomplete from '~/components/common/Autocomplete.vue';
 
 describe('Autocomplete', () => {
   const mockSearchFn = vi.fn();
