@@ -24,7 +24,10 @@ export const useCalendarStore = defineStore('calendar', () => {
     try {
       isLoading.value = true;
       error.value = null;
-      stations.value = await stationsService.getStations(query);
+      const allStations = await stationsService.getStations(query);
+      stations.value = allStations.filter(station => 
+        station.name !== 'station-name{{i}}'
+      );
     } catch (err) {
       error.value = 'Failed to fetch stations';
       console.error(err);

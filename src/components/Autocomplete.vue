@@ -16,7 +16,7 @@
         <li v-for="suggestion in suggestions" 
             :key="suggestion.id"
             @mousedown="selectSuggestion(suggestion)"
-            class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+            class="px-4 py-2 hover:bg-gray-100 rounded-lg cursor-pointer">
           {{ suggestion.name }}
         </li>
       </ul>
