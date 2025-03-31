@@ -61,11 +61,14 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
 import { format, startOfWeek, addDays } from 'date-fns';
 import { useCalendarStore } from '~/stores/calendarStore';
 import Autocomplete from '~/components/common/Autocomplete.vue';
 import WeekDayTile from '~/components/calendar/WeekDayTile.vue';
 
+const router = useRouter();
 const calendarStore = useCalendarStore();
 const selectedBooking = ref(null);
 const query = ref('');
@@ -136,8 +139,19 @@ const getBookingsForDate = (date) => {
   );
 };
 
-const handleBookingClick = (booking) => {
+const handleBookingClick = async (booking) => {
   selectedBooking.value = booking;
+  // Find the station that contains this booking
+  const station = calendarStore.stations.find(station => 
+    station.bookings.some(b => b.id === booking.id)
+  );
+  
+  if (station) {
+    calendarStore.setSelectedStation(station);
+    router.push(`/booking/${station.id}/${booking.id}`);
+  } else {
+    console.error('Could not find station for booking:', booking);
+  }
 };
 
 onMounted(async () => {
