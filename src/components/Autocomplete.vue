@@ -1,12 +1,12 @@
 <template>
-  <div class="relative">
+<div class="relative text-gray-800 border-none">
     <input
       type="text"
       :value="modelValue"
       @input="handleInput"
       @focus="handleFocus"
       @blur="handleBlur"
-      class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      class="w-full px-4 py-2 shadow-sm rounded-lg focus:outline-none focus:ring-2 bg-white focus:ring-teal-500"
       :placeholder="placeholder"
     />
     
@@ -23,7 +23,7 @@
     </div>
 
     <div v-if="isLoading" class="absolute right-3 top-2.5">
-      <div class="w-5 h-5 border-2 border-blue-500 rounded-full animate-spin border-t-transparent"></div>
+      <div class="w-5 h-5 border-2 border-teal-500 rounded-full animate-spin border-t-transparent"></div>
     </div>
   </div>
 </template>
