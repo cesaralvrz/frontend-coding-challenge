@@ -12,20 +12,26 @@
     <div class="flex justify-between items-center mb-6">
       <button 
         @click="previousWeek"
-        class="bg-teal-500 text-white px-6 py-2 rounded-lg hover:bg-teal-600 transition-colors duration-200 shadow-sm cursor-pointer"
+        class="bg-teal-500 text-white px-4 sm:px-6 py-2 rounded-lg hover:bg-teal-600 transition-colors duration-200 shadow-sm cursor-pointer font-bold flex items-center gap-2"
       >
-        Previous Week
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span class="hidden sm:inline">Previous Week</span>
       </button>
 
-      <h2 class="text-2xl font-semibold text-gray-800">
+      <h2 class="text-md md:text-2xl font-semibold text-gray-800 text-center md:text-left">
         {{ formatDateRange }}
       </h2>
 
       <button 
         @click="nextWeek"
-        class="bg-teal-500 text-white px-6 py-2 rounded-lg hover:bg-teal-600 transition-colors duration-200 shadow-sm cursor-pointer"
+        class="bg-teal-500 text-white px-4 sm:px-6 py-2 rounded-lg hover:bg-teal-600 transition-colors duration-200 shadow-sm cursor-pointer font-bold flex items-center gap-2"
       >
-        Next Week
+        <span class="hidden sm:inline">Next Week</span>
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
       </button>
     </div>
 

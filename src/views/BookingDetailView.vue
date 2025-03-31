@@ -1,47 +1,61 @@
 <template>
-  <div class="container mx-auto p-6 text-gray-800">
-    <div v-if="bookingStore.loading" class="text-center">
-      <p class="text-gray-600">Loading booking details...</p>
+  <div class="container mx-auto p-6 text-gray-800 min-h-screen flex items-center justify-center w-full">
+    <div v-if="bookingStore.loading" class="w-full">
+      <div class="animate-pulse text-center">
+        <div class="w-12 h-12 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p class="text-gray-600 text-lg">Loading booking details...</p>
+      </div>
     </div>
 
-    <div v-else-if="bookingStore.error" class="text-center">
-      <p class="text-red-600">{{ bookingStore.error }}</p>
+    <div v-else-if="bookingStore.error" class="w-full">
+      <div class="text-center bg-red-50 p-6 rounded-lg shadow-sm">
+        <svg class="w-12 h-12 text-red-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p class="text-red-600 text-lg">{{ bookingStore.error }}</p>
+      </div>
     </div>
 
-    <div v-else-if="bookingStore.currentBooking" class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
-      <h1 class="text-2xl font-bold text-gray-800 mb-6">Booking Details</h1>
+    <div v-else-if="bookingStore.currentBooking" 
+         class="w-full max-w-2xl bg-white rounded-xl shadow-lg p-8 transform transition-all duration-300 hover:shadow-xl">
+      <h1 class="text-3xl font-bold text-gray-800 mb-8 border-b pb-4">Booking Details</h1>
       
-      <div class="space-y-4">
-        <div class="border-b pb-3">
-          <h2 class="text-sm text-gray-600">Customer Name</h2>
-          <p class="text-lg">{{ bookingStore.currentBooking.customerName }}</p>
+      <div class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-gray-50 rounded-lg p-4 transition-all duration-200 hover:bg-gray-100">
+            <h2 class="text-sm font-medium text-gray-600 mb-2">Customer Name</h2>
+            <p class="text-xl text-gray-800">{{ bookingStore.currentBooking.customerName }}</p>
+          </div>
+
+          <div class="bg-gray-50 rounded-lg p-4 transition-all duration-200 hover:bg-gray-100">
+            <h2 class="text-sm font-medium text-gray-600 mb-2">Station</h2>
+            <p class="text-xl text-gray-800">{{ stationName }}</p>
+          </div>
         </div>
 
-        <div class="border-b pb-3">
-          <h2 class="text-sm text-gray-600">Booking Period</h2>
-          <p class="text-lg">
+        <div class="bg-gray-50 rounded-lg p-4 transition-all duration-200 hover:bg-gray-100">
+          <h2 class="text-sm font-medium text-gray-600 mb-2">Booking Period</h2>
+          <p class="text-xl text-gray-800">
             {{ formatDate(bookingStore.currentBooking.startDate) }} - 
             {{ formatDate(bookingStore.currentBooking.endDate) }}
           </p>
-        </div>
-
-        <div class="border-b pb-3">
-          <h2 class="text-sm text-gray-600">Duration</h2>
-          <p class="text-lg">{{ calculateDuration }} days</p>
-        </div>
-
-        <div class="border-b pb-3">
-          <h2 class="text-sm text-gray-600">Station</h2>
-          <p class="text-lg">{{ stationName }}</p>
+          <p class="text-sm text-teal-600 mt-2">{{ calculateDuration }} days</p>
         </div>
       </div>
 
-      <div class="mt-8">
+      <div class="mt-10 flex justify-center">
         <button
           @click="handleReturn"
-          class="bg-teal-500 text-white px-6 py-2 rounded-lg hover:bg-teal-600 transition-colors duration-200 cursor-pointer"
+          class="bg-teal-500 text-white px-8 py-3 rounded-lg hover:bg-teal-600 
+                 transition-all duration-200 transform hover:scale-105 hover:shadow-md
+                 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50 cursor-pointer"
         >
-          Return to Calendar
+          <span class="flex items-center font-bold">
+            <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Return to Calendar
+          </span>
         </button>
       </div>
     </div>
