@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { startOfWeek, addWeeks, eachDayOfInterval, endOfWeek } from 'date-fns';
+import { startOfWeek, eachDayOfInterval, endOfWeek } from 'date-fns';
 import { stationsService } from '~/services/stationsService';
 
 export const useCalendarStore = defineStore('calendar', () => {
@@ -8,7 +8,6 @@ export const useCalendarStore = defineStore('calendar', () => {
   const currentDate = ref(new Date());
   const selectedStation = ref(null);
   const stations = ref([]);
-  const bookings = ref([]);
   const isLoading = ref(false);
   const error = ref(null);
 
@@ -40,12 +39,8 @@ export const useCalendarStore = defineStore('calendar', () => {
     selectedStation.value = station;
   };
 
-  const nextWeek = () => {
-    currentDate.value = addWeeks(currentDate.value, 1);
-  };
-
-  const previousWeek = () => {
-    currentDate.value = addWeeks(currentDate.value, -1);
+  const clearStation = () => {
+    selectedStation.value = null;
   };
 
   return {
@@ -53,7 +48,6 @@ export const useCalendarStore = defineStore('calendar', () => {
     currentDate,
     selectedStation,
     stations,
-    bookings,
     isLoading,
     error,
     // Computed
@@ -61,7 +55,6 @@ export const useCalendarStore = defineStore('calendar', () => {
     // Actions
     fetchStations,
     setSelectedStation,
-    nextWeek,
-    previousWeek,
+    clearStation,
   };
 });
