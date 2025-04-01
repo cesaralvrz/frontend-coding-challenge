@@ -5,7 +5,8 @@ import { bookingService } from '~/services/bookingService';
 
 vi.mock('~/services/bookingService', () => ({
   bookingService: {
-    getBooking: vi.fn()
+    getBooking: vi.fn(),
+    updateBooking: vi.fn()
   }
 }));
 
@@ -64,6 +65,54 @@ describe('bookingStore', () => {
 
       expect(store.currentBooking).toBeNull();
       expect(store.error).toBeNull();
+    });
+  });
+
+  describe('rescheduleBooking', () => {
+    it('should reschedule booking successfully', async () => {
+      const mockBooking = {
+        id: '123',
+        startDate: '2024-03-21',
+        endDate: '2024-03-23'
+      };
+      
+      const updateCalendarFn = vi.fn();
+      bookingService.updateBooking.mockResolvedValueOnce(mockBooking);
+    
+      const store = useBookingStore();
+      await store.rescheduleBooking('station1', '123', {
+        startDate: '2024-03-21',
+        endDate: '2024-03-23'
+      }, updateCalendarFn);
+    
+      expect(store.loading).toBe(false);
+      expect(store.error).toBeNull();
+      expect(store.currentBooking).toEqual(mockBooking);
+      expect(updateCalendarFn).toHaveBeenCalledWith('station1', '123', {
+        startDate: '2024-03-21',
+        endDate: '2024-03-23'
+      });
+    });
+  
+    it('should handle reschedule error', async () => {
+      bookingService.updateBooking.mockRejectedValueOnce(new Error('API Error'));
+      const updateCalendarFn = vi.fn();
+    
+      const store = useBookingStore();
+      
+      await expect(store.rescheduleBooking(
+        'station1',
+        '123',
+        {
+          startDate: '2024-03-21',
+          endDate: '2024-03-23'
+        },
+        updateCalendarFn
+      )).rejects.toThrow();
+    
+      expect(store.loading).toBe(false);
+      expect(store.error).toBe('Failed to reschedule booking');
+      expect(updateCalendarFn).not.toHaveBeenCalled();
     });
   });
 });

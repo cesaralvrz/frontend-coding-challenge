@@ -6,12 +6,12 @@
       </svg>
       <input
         type="text"
+        class="w-full pl-10 pr-4 py-2 shadow-sm rounded-lg focus:outline-none focus:ring-2 bg-white focus:ring-teal-500"
         :value="modelValue"
+        :placeholder="placeholder"
         @input="handleInput"
         @focus="handleFocus"
         @blur="handleBlur"
-        class="w-full pl-10 pr-4 py-2 shadow-sm rounded-lg focus:outline-none focus:ring-2 bg-white focus:ring-teal-500"
-        :placeholder="placeholder"
       />
     </div>
     
@@ -20,8 +20,9 @@
       <ul>
         <li v-for="suggestion in suggestions" 
             :key="suggestion.id"
+            class="px-4 py-2 hover:bg-gray-100 rounded-lg cursor-pointer"
             @mousedown="selectSuggestion(suggestion)"
-            class="px-4 py-2 hover:bg-gray-100 rounded-lg cursor-pointer">
+        >
           {{ suggestion.name }}
         </li>
       </ul>

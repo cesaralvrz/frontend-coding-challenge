@@ -3,9 +3,9 @@
     <div class="mb-8">
       <Autocomplete
         v-model="query"
+        placeholder="Search for a station..."
         :search-function="searchStations"
         @select="handleStationSelect"
-        placeholder="Search for a station..."
       />
     </div>
 
@@ -24,9 +24,9 @@
         {{ formatDateRange }}
       </h2>
 
-      <button 
-        @click="nextWeek"
+      <button
         class="bg-teal-500 text-white px-4 sm:px-6 py-2 rounded-lg hover:bg-teal-600 transition-colors duration-200 shadow-sm cursor-pointer font-bold flex items-center gap-2"
+        @click="nextWeek"
       >
         <span class="hidden sm:inline">Next Week</span>
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -41,9 +41,9 @@
     >
       <div class="flex items-center gap-3 bg-amber-100 p-3 rounded-lg border border-amber-200">
         <span class="text-gray-800">Selected Station: <strong>{{ calendarStore.selectedStation.name }}</strong></span>
-        <button 
-          @click="clearStation" 
+        <button
           class="text-amber-400 hover:text-amber-500 transition-colors duration-200 cursor-pointer"
+          @click="clearStation" 
         >
           ✕
         </button>
@@ -54,12 +54,13 @@
       <WeekDayTile 
         v-for="date in weekDates" 
         :key="date"
+        class="bg-white h-full rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
         :date="date"
         :bookings="getBookingsForDate(date)"
         :stations="calendarStore.stations"
         :selected-station="calendarStore.selectedStation"
         @booking-click="handleBookingClick"
-        class="bg-white h-full rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+        @handle-reschedule="handleReschedule"
       />
     </div>
   </div>
@@ -68,14 +69,17 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-
-import { format, startOfWeek, addDays } from 'date-fns';
+import { format, startOfWeek, addDays, differenceInDays } from 'date-fns';
 import { useCalendarStore } from '~/stores/calendarStore';
+import { useBookingStore } from '~/stores/bookingStore';
+
 import Autocomplete from '~/components/common/Autocomplete.vue';
 import WeekDayTile from '~/components/calendar/WeekDayTile.vue';
 
 const router = useRouter();
 const calendarStore = useCalendarStore();
+const bookingStore = useBookingStore();
+
 const selectedBooking = ref(null);
 const query = ref('');
 const baseDate = ref(new Date('2021-01-01')); // Date to correspond to the bookings
@@ -157,6 +161,33 @@ const handleBookingClick = async (booking) => {
     router.push(`/booking/${station.id}/${booking.id}`);
   } else {
     console.error('Could not find station for booking:', booking);
+  }
+};
+
+const handleReschedule = async ({ bookingId, oldStartDate, oldEndDate, newDate }) => {
+  try {
+    const duration = differenceInDays(new Date(oldEndDate), new Date(oldStartDate));
+    const newStartDate = newDate;
+    const newEndDate = addDays(newDate, duration);
+
+    // Find the station that contains this booking
+    const station = calendarStore.stations.find(station => 
+      station.bookings.some(b => b.id === bookingId)
+    );
+
+    if (station) {
+      await bookingStore.rescheduleBooking(
+        station.id, 
+        bookingId, 
+        {
+          startDate: newStartDate,
+          endDate: newEndDate
+        },
+        calendarStore.updateBookingDates
+      );
+    }
+  } catch (error) {
+    console.error('Failed to reschedule booking:', error);
   }
 };
 

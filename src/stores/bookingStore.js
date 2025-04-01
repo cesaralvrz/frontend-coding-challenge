@@ -25,11 +25,37 @@ export const useBookingStore = defineStore('booking', () => {
     error.value = null;
   };
 
+  const rescheduleBooking = async (stationId, bookingId, newDates, updateCalendarFn) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const updatedBooking = await bookingService.updateBooking(stationId, bookingId, {
+        startDate: newDates.startDate,
+        endDate: newDates.endDate
+      });
+      currentBooking.value = updatedBooking;
+      
+      // Update the calendar store using the passed function
+      if (updateCalendarFn) {
+        updateCalendarFn(stationId, bookingId, newDates);
+      }
+      
+      return updatedBooking;
+    } catch (err) {
+      error.value = 'Failed to reschedule booking';
+      console.error(err);
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return {
     currentBooking,
     loading,
     error,
     fetchBooking,
-    clearBooking
+    clearBooking,
+    rescheduleBooking
   };
 });

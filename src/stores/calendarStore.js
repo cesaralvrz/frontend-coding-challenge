@@ -43,6 +43,20 @@ export const useCalendarStore = defineStore('calendar', () => {
     selectedStation.value = null;
   };
 
+  const updateBookingDates = (stationId, bookingId, newDates) => {
+    const stationIndex = stations.value.findIndex(s => s.id === stationId);
+    if (stationIndex === -1) return;
+
+    const bookingIndex = stations.value[stationIndex].bookings.findIndex(b => b.id === bookingId);
+    if (bookingIndex === -1) return;
+
+    stations.value[stationIndex].bookings[bookingIndex] = {
+      ...stations.value[stationIndex].bookings[bookingIndex],
+      startDate: newDates.startDate,
+      endDate: newDates.endDate
+    };
+  };
+
   return {
     // State
     currentDate,
@@ -56,5 +70,6 @@ export const useCalendarStore = defineStore('calendar', () => {
     fetchStations,
     setSelectedStation,
     clearStation,
+    updateBookingDates,
   };
 });

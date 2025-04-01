@@ -80,4 +80,77 @@ describe('calendarStore', () => {
     store.clearStation();
     expect(store.selectedStation).toBeNull();
   });
+
+  describe('updateBookingDates', () => {
+    it('should update booking dates in station', () => {
+      const store = useCalendarStore();
+      const mockStations = [
+        {
+          id: 'station1',
+          bookings: [
+            {
+              id: 'booking1',
+              customerName: 'John Doe',
+              startDate: '2024-03-20',
+              endDate: '2024-03-22'
+            }
+          ]
+        }
+      ];
+      
+      store.stations = mockStations;
+      
+      store.updateBookingDates('station1', 'booking1', {
+        startDate: '2024-03-21',
+        endDate: '2024-03-23'
+      });
+  
+      expect(store.stations[0].bookings[0]).toEqual({
+        id: 'booking1',
+        customerName: 'John Doe',
+        startDate: '2024-03-21',
+        endDate: '2024-03-23'
+      });
+    });
+  
+    it('should not modify state if station not found', () => {
+      const store = useCalendarStore();
+      const mockStations = [
+        {
+          id: 'station1',
+          bookings: [{ id: 'booking1' }]
+        }
+      ];
+      
+      store.stations = mockStations;
+      const originalState = JSON.parse(JSON.stringify(mockStations));
+      
+      store.updateBookingDates('nonexistent', 'booking1', {
+        startDate: '2024-03-21',
+        endDate: '2024-03-23'
+      });
+  
+      expect(store.stations).toEqual(originalState);
+    });
+  
+    it('should not modify state if booking not found', () => {
+      const store = useCalendarStore();
+      const mockStations = [
+        {
+          id: 'station1',
+          bookings: [{ id: 'booking1' }]
+        }
+      ];
+      
+      store.stations = mockStations;
+      const originalState = JSON.parse(JSON.stringify(mockStations));
+      
+      store.updateBookingDates('station1', 'nonexistent', {
+        startDate: '2024-03-21',
+        endDate: '2024-03-23'
+      });
+  
+      expect(store.stations).toEqual(originalState);
+    });
+  });
 });
