@@ -97,4 +97,3 @@ src/
 ├── utils/          # Utility functions
 └── views/          # Page components
  ```
-```
