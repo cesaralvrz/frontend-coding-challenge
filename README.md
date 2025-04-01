@@ -1,12 +1,12 @@
-# Frontend Calendar Challenge
+# 🏕️ Frontend Calendar Challenge
 
 A Vue.js application that implements a calendar interface for managing station bookings. Built with Vue 3, Vite, and modern web technologies.
 
-## Demo
+## 💻 Demo
 
 Check out the live demo: [Calendar Challenge Demo](https://cesaralvrz.github.io/frontend-coding-challenge/)
 
-## Screenshots
+## 📷 Screenshots
 
 ### Calendar View
 ![Calendar View](./public/ss1.png)
@@ -14,7 +14,7 @@ Check out the live demo: [Calendar Challenge Demo](https://cesaralvrz.github.io/
 ### Booking Details
 ![Booking Details](./public/ss2.png)
 
-## Technologies
+## 🛠️ Technologies
 
 - Vue 3 with Composition API and `<script setup>` syntax
 - Vite for fast development and building
@@ -23,8 +23,9 @@ Check out the live demo: [Calendar Challenge Demo](https://cesaralvrz.github.io/
 - TailwindCSS for styling
 - Vitest + Testing Library for testing
 - date-fns for date manipulation
+- ESLint + Prettier for code consistency
 
-## Features
+## 📝 Features
 
 - Interactive calendar view with week navigation
 - Station search with autocomplete
@@ -33,7 +34,7 @@ Check out the live demo: [Calendar Challenge Demo](https://cesaralvrz.github.io/
 - Responsive design
 - Comprehensive test coverage
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
@@ -63,50 +64,6 @@ npm run build
 ```bash
 npm run test
  ```
-## Trae AI
-27 context(s) used
-
-I'll help you create a comprehensive README.md for your Vue.js project. Based on the codebase I can see, I'll create a detailed README that includes project overview, setup instructions, and other relevant information.
-
-2. Install dependencies
-3. Start development server
-The application will be available at http://localhost:5173
-
-### Building for Production
-### Running Tests
-## Project Structure
-## Testing
-The project uses Vitest and Testing Library for unit and component testing. Tests can be found in the src/tests directory.
-
-## Development
-This template uses Vue 3 <script setup> SFCs. Check out the script setup docs to learn more.
-
-For IDE support and tooling information, refer to the Vue Docs Scaling up Guide .
-
-## License
-[Add your license information here]
-
-## cesaralvrz
-Copy
-
-Delete
-
-Include eslint and prettier scripts
-
-## Trae AI
-Used 1 Reference
-
-README.md 76-76
-
-I'll add the ESLint and Prettier scripts to the README.md. I'll add them under the "Running Tests" section.
-
-```markdown
-// ... existing content ...
-
-### Running Tests
-```bash
-npm run test
- ```
 
 ### Linting and Formatting
 Run ESLint to check for code style and errors:
@@ -127,7 +84,7 @@ Format code with Prettier:
 npm run format
  ```
 
-## Project Structure
+## 🏗️ Project Structure
 ```plaintext
 src/
 ├── assets/         # Static assets
