@@ -10,12 +10,17 @@
     </div>
 
     <div class="flex justify-between items-center mb-6">
-      <button 
+      <button
         @click="previousWeek"
         class="bg-teal-500 text-white px-4 sm:px-6 py-2 rounded-lg hover:bg-teal-600 transition-colors duration-200 shadow-sm cursor-pointer font-bold flex items-center gap-2"
       >
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
         </svg>
         <span class="hidden sm:inline">Previous Week</span>
       </button>
@@ -35,15 +40,14 @@
       </button>
     </div>
 
-    <div 
-      v-if="calendarStore.selectedStation" 
-      class="mb-6"
-    >
+    <div v-if="calendarStore.selectedStation" class="mb-6">
       <div class="flex items-center gap-3 bg-amber-100 p-3 rounded-lg border border-amber-200">
-        <span class="text-gray-800">Selected Station: <strong>{{ calendarStore.selectedStation.name }}</strong></span>
+        <span class="text-gray-800"
+          >Selected Station: <strong>{{ calendarStore.selectedStation.name }}</strong></span
+        >
         <button
           class="text-amber-400 hover:text-amber-500 transition-colors duration-200 cursor-pointer"
-          @click="clearStation" 
+          @click="clearStation"
         >
           ✕
         </button>
@@ -51,8 +55,8 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-7 gap-6">
-      <WeekDayTile 
-        v-for="date in weekDates" 
+      <WeekDayTile
+        v-for="date in weekDates"
         :key="date"
         class="bg-white h-full rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
         :date="date"
@@ -67,131 +71,131 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { format, startOfWeek, addDays, differenceInDays } from 'date-fns';
-import { useCalendarStore } from '~/stores/calendarStore';
-import { useBookingStore } from '~/stores/bookingStore';
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { format, startOfWeek, addDays, differenceInDays } from 'date-fns'
+import { useCalendarStore } from '~/stores/calendarStore'
+import { useBookingStore } from '~/stores/bookingStore'
 
-import Autocomplete from '~/components/common/Autocomplete.vue';
-import WeekDayTile from '~/components/calendar/WeekDayTile.vue';
+import Autocomplete from '~/components/common/Autocomplete.vue'
+import WeekDayTile from '~/components/calendar/WeekDayTile.vue'
 
-const router = useRouter();
-const calendarStore = useCalendarStore();
-const bookingStore = useBookingStore();
+const router = useRouter()
+const calendarStore = useCalendarStore()
+const bookingStore = useBookingStore()
 
-const selectedBooking = ref(null);
-const query = ref('');
-const baseDate = ref(new Date('2021-01-01')); // Date to correspond to the bookings
+const selectedBooking = ref(null)
+const query = ref('')
+const baseDate = ref(new Date('2021-01-01')) // Date to correspond to the bookings
 
 const weekDates = computed(() => {
-  const weekStart = startOfWeek(baseDate.value);
-  return Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
-});
+  const weekStart = startOfWeek(baseDate.value)
+  return Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
+})
 
 const formatDateRange = computed(() => {
-  const start = format(baseDate.value, 'MMM d, yyyy');
-  const end = format(addDays(baseDate.value, 6), 'MMM d, yyyy');
-  return `${start} - ${end}`;
-});
+  const start = format(baseDate.value, 'MMM d, yyyy')
+  const end = format(addDays(baseDate.value, 6), 'MMM d, yyyy')
+  return `${start} - ${end}`
+})
 
 const previousWeek = () => {
-  baseDate.value = addDays(baseDate.value, -7);
-};
+  baseDate.value = addDays(baseDate.value, -7)
+}
 
 const nextWeek = () => {
-  baseDate.value = addDays(baseDate.value, 7);
-};
+  baseDate.value = addDays(baseDate.value, 7)
+}
 
 const searchStations = async (searchQuery) => {
-  if (!searchQuery.trim()) return [];
-  return calendarStore.stations.filter(station => 
+  if (!searchQuery.trim()) return []
+  return calendarStore.stations.filter((station) =>
     station.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-};
+  )
+}
 
 const handleStationSelect = async (station) => {
-  calendarStore.setSelectedStation(station);
-  query.value = '';
-};
+  calendarStore.setSelectedStation(station)
+  query.value = ''
+}
 
 const clearStation = () => {
-  calendarStore.clearStation();
-  query.value = '';
-};
+  calendarStore.clearStation()
+  query.value = ''
+}
 
 const isBookingForDate = (booking, date) => {
   try {
-    const targetDate = new Date(date);
-    const bookingStartDate = new Date(booking.startDate);
-    const bookingEndDate = new Date(booking.endDate);
-    
+    const targetDate = new Date(date)
+    const bookingStartDate = new Date(booking.startDate)
+    const bookingEndDate = new Date(booking.endDate)
+
     // Normalize all dates to start of day
-    [targetDate, bookingStartDate, bookingEndDate].forEach(date => 
-      date.setHours(0, 0, 0, 0)
-    );
-    
-    return targetDate.getTime() === bookingStartDate.getTime() || 
-           targetDate.getTime() === bookingEndDate.getTime();
+    ;[targetDate, bookingStartDate, bookingEndDate].forEach((date) => date.setHours(0, 0, 0, 0))
+
+    return (
+      targetDate.getTime() === bookingStartDate.getTime() ||
+      targetDate.getTime() === bookingEndDate.getTime()
+    )
   } catch (error) {
-    console.error('Error processing booking:', booking, error);
-    return false;
+    console.error('Error processing booking:', booking, error)
+    return false
   }
-};
+}
 
 const getBookingsForDate = (date) => {
-  const stations = calendarStore.selectedStation 
-    ? [calendarStore.selectedStation] 
-    : calendarStore.stations;
+  const stations = calendarStore.selectedStation
+    ? [calendarStore.selectedStation]
+    : calendarStore.stations
 
-  return stations.flatMap(station => 
-    station.bookings.filter(booking => isBookingForDate(booking, date))
-  );
-};
+  return stations.flatMap((station) =>
+    station.bookings.filter((booking) => isBookingForDate(booking, date))
+  )
+}
 
 const handleBookingClick = async (booking) => {
-  selectedBooking.value = booking;
+  selectedBooking.value = booking
   // Find the station that contains this booking
-  const station = calendarStore.stations.find(station => 
-    station.bookings.some(b => b.id === booking.id)
-  );
-  
+  const station = calendarStore.stations.find((station) =>
+    station.bookings.some((b) => b.id === booking.id)
+  )
+
   if (station) {
-    calendarStore.setSelectedStation(station);
-    router.push(`/booking/${station.id}/${booking.id}`);
+    calendarStore.setSelectedStation(station)
+    router.push(`/booking/${station.id}/${booking.id}`)
   } else {
-    console.error('Could not find station for booking:', booking);
+    console.error('Could not find station for booking:', booking)
   }
-};
+}
 
 const handleReschedule = async ({ bookingId, oldStartDate, oldEndDate, newDate }) => {
   try {
-    const duration = differenceInDays(new Date(oldEndDate), new Date(oldStartDate));
-    const newStartDate = newDate;
-    const newEndDate = addDays(newDate, duration);
+    const duration = differenceInDays(new Date(oldEndDate), new Date(oldStartDate))
+    const newStartDate = newDate
+    const newEndDate = addDays(newDate, duration)
 
     // Find the station that contains this booking
-    const station = calendarStore.stations.find(station => 
-      station.bookings.some(b => b.id === bookingId)
-    );
+    const station = calendarStore.stations.find((station) =>
+      station.bookings.some((b) => b.id === bookingId)
+    )
 
     if (station) {
       await bookingStore.rescheduleBooking(
-        station.id, 
-        bookingId, 
+        station.id,
+        bookingId,
         {
           startDate: newStartDate,
           endDate: newEndDate
         },
         calendarStore.updateBookingDates
-      );
+      )
     }
   } catch (error) {
-    console.error('Failed to reschedule booking:', error);
+    console.error('Failed to reschedule booking:', error)
   }
-};
+}
 
 onMounted(async () => {
-  await calendarStore.fetchStations();
-});
+  await calendarStore.fetchStations()
+})
 </script>
