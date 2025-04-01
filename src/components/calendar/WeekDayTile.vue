@@ -35,12 +35,11 @@
           </div>
           
           <div 
-            class="cursor-move opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            class="cursor-move opacity-0 group-hover:opacity-100 transition-opacity duration-200 ml-2 flex items-center"
             draggable="true"
             @dragstart="handleDragStart($event, booking)"
-            @dragend="handleDragEnd"
           >
-            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="w-6 h-6 text-white hover:text-teal-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9h8m-8 4h8m-8 4h8" />
             </svg>
           </div>
@@ -78,10 +77,6 @@ const handleDragStart = (event, booking) => {
   event.dataTransfer.setData('bookingId', booking.id);
   event.dataTransfer.setData('startDate', booking.startDate);
   event.dataTransfer.setData('endDate', booking.endDate);
-};
-
-const handleDragEnd = () => {
-  // Clean up if needed
 };
 
 const handleDrop = (event) => {
